@@ -194,6 +194,10 @@ project/
     └── page-search.js           # Optional in-page search widget
 ```
 
+## Image Extraction
+
+Early versions of the script attempted to extract embedded images from the PDFs and include them inline in the HTML output. This was abandoned after testing revealed widespread reliability problems. Many of the PDFs in this collection span over a decade of creation tools and PDF format versions, and the images encoded in them use a variety of compression codecs that do not all extract cleanly with modern libraries. Grayscale images were particularly problematic, frequently rendering as completely corrupted or inverted output. Rather than investing in per-codec workarounds for an unpredictable range of encoding issues, we determined that image extraction was unnecessary given that every card in the HTML archive already links directly to the original PDF. Readers who need to see photos or diagrams can click through to the source document, where the images render correctly in any PDF viewer.
+
 ## License
 
 This script was developed for a specific public-sector archival project. You are free to adapt it for your own use. No warranty is provided.
