@@ -112,6 +112,10 @@ Each press release card includes:
 
 All user-facing text is HTML-escaped to prevent injection from unexpected characters in the source PDFs.
 
+### Screenshot Example
+
+![Screenshot](images/press-releases-2004-2007-screenshot.jpg)
+
 ## Adapting This for Your Own PDFs
 
 The script is built around patterns specific to one organization's press releases, but the architecture is general. Here is what you would need to change:
