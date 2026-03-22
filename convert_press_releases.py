@@ -21,6 +21,9 @@ PDF_SUBDIR   = "pdfs"   # subfolder name relative to the HTML file
 TODAY_STR    = datetime.today().strftime("%Y-%m-%d")
 FOOTER_CREDIT = "San Jose Police Department"
 VERSION_LINE  = f"ver. {TODAY_STR} -- dtb"
+# Base URL of the folder where this page is published (no trailing slash).
+# Used for canonical tag and JSON-LD structured data.
+BASE_URL     = "https://info.sjpd.org/records/press_release_archive/2004-2007"
 
 # ── Julian day helper ──────────────────────────────────────────────────────────
 def julian_to_date(year_2digit, julian_day):
@@ -993,12 +996,61 @@ def build_html(records):
 """
         cards_html += '</div>\n'
 
+    # ── Compute values needed for SEO tags ────────────────────────────────────
+    real_years   = [y for y in years_sorted if y]
+    year_min     = min(real_years) if real_years else 2004
+    year_max     = max(real_years) if real_years else 2007
+    page_url     = f"{BASE_URL}/"
+    archive_url  = "https://info.sjpd.org/records/press_release_archive/"
+    meta_desc    = (
+        f"San Jose Police Department press releases {year_min}\u2013{year_max}. "
+        f"{total} releases archived from original PDF records, covering homicides, "
+        f"fatal traffic collisions, sexual assaults, missing persons, and community programs."
+    )
+    json_ld = f"""<script type="application/ld+json">
+[
+  {{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "SJPD Press Releases {year_min}\u2013{year_max}",
+    "description": "{meta_desc}",
+    "url": "{page_url}",
+    "publisher": {{
+      "@type": "GovernmentOrganization",
+      "name": "San Jose Police Department",
+      "url": "https://www.sjpd.org"
+    }}
+  }},
+  {{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "SJPD Press Release Archive",
+        "item": "{archive_url}"
+      }},
+      {{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{year_min}\u2013{year_max} Press Releases",
+        "item": "{page_url}"
+      }}
+    ]
+  }}
+]
+</script>"""
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SJPD Press Releases 2004&ndash;2007</title>
+<title>SJPD Press Releases {year_min}&ndash;{year_max} | San Jose Police Department Archive</title>
+<meta name="description" content="{meta_desc}">
+<link rel="canonical" href="{page_url}">
+{json_ld}
 <style>
 {CSS}
 </style>
