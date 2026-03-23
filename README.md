@@ -116,6 +116,20 @@ All user-facing text is HTML-escaped to prevent injection from unexpected charac
 
 ![Screenshot](images/press-releases-2004-2007-screenshot.jpg)
 
+## In-Page Search Widget
+
+The archive includes `page-search.js`, a standalone in-page search widget with no dependencies. Drop the script into any HTML page to add a sticky search bar at the top of the page with match highlighting and Prev/Next navigation. The widget auto-injects its own HTML and CSS.
+
+### Query String Support
+
+Appending `?q=term` to any page URL will automatically populate the search field, highlight all matches, and scroll to the first result. For example:
+
+```
+https://example.org/archive/home.html?q=homicide
+```
+
+This enables deep linking from external search engines, bookmarks, or other pages on your site directly to highlighted results within the archive. When no `?q=` parameter is present, the widget loads normally with an empty search field.
+
 ## Adapting This for Your Own PDFs
 
 The script is built around patterns specific to one organization's press releases, but the architecture is general. Here is what you would need to change:
@@ -180,7 +194,7 @@ A dedicated accessibility pass added: a skip-navigation link, visible focus indi
 
 **Character encoding** — Most PDFs from this era used standard Western encodings. PDFs with unusual font encodings or ligature substitutions may produce garbled text. Review the warnings output for anomalies.
 
-**Deep linking** — If the archive page is indexed by search engines, users may land on the page without context. A URL-parameter-based approach (passing a search term or release ID in the query string) can be paired with an in-page search widget to highlight the relevant content on load.
+**Deep linking** — The `page-search.js` widget supports query string parameters (`?q=term`) for deep linking into the archive. When paired with an external search integration (such as Google's Programmable Search Engine), users can click a search result and land on the archive page with matching content already highlighted and scrolled into view.
 
 ## File Structure
 
@@ -190,8 +204,8 @@ project/
 ├── pdfs/                        # Source PDF files (input)
 └── output/
     ├── home.html                # Generated HTML archive (output)
-    ├── pdfs/                    # Copy of source PDFs (for linking)
-    └── page-search.js           # Optional in-page search widget
+    ├── page-search.js           # In-page search widget with query string support
+    └── pdfs/                    # Copy of source PDFs (for linking)
 ```
 
 ## Image Extraction
