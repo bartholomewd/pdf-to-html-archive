@@ -293,4 +293,20 @@
     input.value = "";
     input.focus();
   });
+  
+  
+// === NEW: Auto-search from query string ===
+  var params = new URLSearchParams(window.location.search);
+  var q = params.get('q');
+  if (q) {
+    input.value = q;
+    doSearch(q);
+    setTimeout(function () {
+      var firstMatch = document.querySelector('mark.' + HIGHLIGHT_CLASS);
+      if (firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
+  }
+
 })();
